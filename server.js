@@ -131,3 +131,29 @@ function loadMainPrompts() {
         }
     })
 }
+
+
+
+
+
+
+
+function removeDepartment() {
+    db.viewDepartmentBudgets()
+        .then(([rows]) => {
+            let department = rows;
+            console.log("\n")
+            console.table(department);
+        })
+        .then(() => loadMainPrompts());
+}
+
+function viewUtilizedBudgetByDepartment() {
+    db.viewDepartmentBudgets()
+        .then(([rows]) => {
+            let departments = rows;
+            console.log("\n")
+            console.table(departments);
+        })
+        .then(() => loadMainPrompts());
+}
