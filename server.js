@@ -103,6 +103,31 @@ function loadMainPrompts() {
             case "UPDATE_EMPLOYEE_ROLE":
                 updateEmployeeRole();
                 break;
-            case "UPDATE_EMPLOYEE"
+            case "UPDATE_EMPLOYEE_MANAGER":
+                updateEmployeeManager();
+                break;
+            case "VIEW_DEPARTMENTS":
+                viewDepartment();
+                break;
+            case "ADD_DEPARTMENT":
+                addDepartment();
+                break;
+            case "REMOVE_DEPARTMENT":
+                removeDepartment();
+                break;
+            case "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT":
+                viewUtilizedBudgetByDepartment();
+                break;
+            case "VIEW_ROLES":
+                viewRoles();
+                break;
+            case "ADD_ROLE":
+                addRole();
+                break;
+            case "REMOVE_ROLE":
+                removeRole();
+                break;
             
-     
+        }
+    })
+}
