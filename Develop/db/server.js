@@ -9,13 +9,16 @@ const db = mysql.createConnection(
     host: 'localhost',
     user: 'root', 
     password: 'MCCARTHY12',
-    database: 'movies_db',
+    database: 'bussiness_db',
     },
     console.log('successfully connected to the database!')
 );
 
 
 
+app.get('/department', (req, res) => {
+    res.send('foo');
+})
 
 
 

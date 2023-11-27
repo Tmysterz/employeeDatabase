@@ -132,14 +132,86 @@ function loadMainPrompts() {
     })
 }
 
+// view all employees
+function viewEmployees() {
+    db.findAllEmployees()
+        .then(([rows]) => {
+            let employees = rows;
+            console.log("\n")
+            console.table(employees);
+        })
+        .then(() => loadMainPrompts());
+}
 
+// view all employees by department
+function viewEmployeesByDepartment() {
+    db.findEmployeesDepartment()
+        .then(([rows]) => {
+            let employeeDepartment = rows;
+            console.log("\n")
+            console.table(employeeDepartment);
+        })
+        .then(() => loadMainPrompts());
+}
 
+// view all employees by manager
+function viewEmployeesByManager() {
+    db.findAllEmployeesManager()
+        .then(([rows]) => {
+            let employeeManager = rows;
+            console.log("\n")
+            console.table(employeeManager);
+        })
+        .then(() => loadMainPrompts());
+}
 
+// add employee
+function addEmployee() {
+    db.addEmployee()
+        .then(([rows]) => {
+            let userAddEmployee = rows;
+            console.log("\n")
+            console.table(userAddEmployee);
+        })
+        .then(() => loadMainPrompts());
+}
 
+// remove employee
+function removeEmployee() {
+    db.removeEmployee()
+        .then(([rows]) => {
+            let userRemoveEmployee = rows;
+            console.log("\n")
+            console.table(userRemoveEmployee);
+        })
+        .then(() => loadMainPrompts());
+}
 
+// update employee role
+function updateEmployeeRole() {
+    db.updateEmployeeRole()
+        .then(([rows]) => {
+            let updateEmployeeR = rows;
+            console.log("\n")
+            console.table(updateEmployeeR);
+        })
+        .then(() => loadMainPrompts());
+}
 
-function removeDepartment() {
-    db.viewDepartmentBudgets()
+// update employee manager
+function updateEmployeeManager() {
+    db.updateEmployeeManager()
+        .then(([rows]) => {
+            let updateEmployeeM = rows;
+            console.log("\n")
+            console.table(updateEmployeeM);
+        })
+        .then(() => loadMainPrompts());
+}
+
+// view all departments
+function viewDepartment() {
+    db.viewDepartment()
         .then(([rows]) => {
             let department = rows;
             console.log("\n")
@@ -148,6 +220,29 @@ function removeDepartment() {
         .then(() => loadMainPrompts());
 }
 
+// add department
+function addDepartment() {
+    db.addDepartment()
+        .then(([rows]) => {
+            let department = rows;
+            console.log("\n")
+            console.table(department);
+        })
+        .then(() => loadMainPrompts());
+}
+
+// remove department
+function removeDepartment() {
+    db.removeDepartment()
+        .then(([rows]) => {
+            let department = rows;
+            console.log("\n")
+            console.table(department);
+        })
+        .then(() => loadMainPrompts());
+}
+
+// view all departments and show their total utilized department budget
 function viewUtilizedBudgetByDepartment() {
     db.viewDepartmentBudgets()
         .then(([rows]) => {
@@ -157,3 +252,49 @@ function viewUtilizedBudgetByDepartment() {
         })
         .then(() => loadMainPrompts());
 }
+
+// view all roles
+function viewRoles() {
+    db.viewRoles()
+        .then(([rows]) => {
+            let roles = rows;
+            console.log("\n")
+            console.table(roles);
+        })
+        .then(() => loadMainPrompts());
+}
+
+// add role
+function addRole() {
+    db.addRole()
+        .then(([rows]) => {
+            let role = rows;
+            console.log("\n")
+            console.table(role);
+        })
+        .then(() => loadMainPrompts());
+}
+
+//  remove role
+function removeRole() {
+    db.removeRole()
+        .then(([rows]) => {
+            let role = rows;
+            console.log("\n")
+            console.table(role);
+        })
+        .then(() => loadMainPrompts());
+}
+
+
+//  ask for help finishing the schema.sql
+
+// ask about why my npm start is not working. cant find module error
+
+// ask about whats happening in the viewUtilizedBudgetByDepartment() function
+
+// ask about where to create the db.viewDepartmentBudgets() function
+
+// what goes in connection.js
+
+
