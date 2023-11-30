@@ -1,6 +1,7 @@
 const { prompt } = require("inquirer");
+const express = require('express');
 const logo = require("asciiart-logo");
-const db = require("./db");
+const db = require("./Develop/db/connection.js");
 
 init();
 
@@ -289,12 +290,32 @@ function removeRole() {
 
 //  ask for help finishing the schema.sql
 
-// ask about why my npm start is not working. cant find module error
-
 // ask about whats happening in the viewUtilizedBudgetByDepartment() function
 
 // ask about where to create the db.viewDepartmentBudgets() function
 
-// what goes in connection.js
 
+// where should i put this code 
 
+const PORT = process.env.PORT || 3001;
+const app = express();
+
+app.get('/department', (req, res) => {
+    res.send('connected to department db');
+})
+
+app.get('/role', (req, res) => {
+    res.send('connected to role db');
+})
+
+app.get('/employee', (req, res) => {
+    res.send('connected to employee db');
+})
+
+app.get('*', (req, res) => {
+    res.send('404 page not found.')
+})
+
+app.listen(PORT, () => {
+    console.log(`server is listening on port ${PORT}`);
+});
