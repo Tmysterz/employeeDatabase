@@ -12,18 +12,17 @@ CREATE TABLE role(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) UNIQUE NOT NULL,
     salary DECIMAL UNSIGNED NOT NULL,
-    department_id int UNSIGNED NOT NULL,
+    department_id int UNSIGNED ,
     FOREIGN KEY (department_id)
     REFERENCES department(id)
     ON DELETE CASCADE
 );
 
---  not finished
 CREATE TABLE employee(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
-    role_id int,
+    role_id int UNSIGNED,
     manager_id int,
     FOREIGN KEY (role_id)
     REFERENCES role(id)

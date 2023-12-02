@@ -1,7 +1,6 @@
-const { prompt } = require("inquirer");
-const express = require('express');
+const { prompt, default: inquirer } = require("inquirer");
 const logo = require("asciiart-logo");
-const db = require("./Develop/db/connection.js");
+const db = require("./Develop/db");
 
 init();
 
@@ -25,14 +24,6 @@ function loadMainPrompts() {
                     value: "VIEW_EMPLOYEES"
                 },
                 {
-                    name: "View All Employees By Department",
-                    value: "VIEW_EMPLOYEES_BY_DEPARTMENT"
-                },
-                {
-                    name: "View All Employees By Manager",
-                    value: "VIEW_EMPLOYEES_BY_MANAGER"
-                },
-                {
                     name: "Add Employee",
                     value: "ADD_EMPLOYEE"
                 },
@@ -43,10 +34,6 @@ function loadMainPrompts() {
                 {
                     name: "Update Employee Role",
                     value: "UPDATE_EMPLOYEE_ROLE"
-                },
-                {
-                    name: "Update Employee Manager",
-                    value: "UPDATE_EMPLOYEE_MANAGER"
                 },
                 {
                     name: "View All Roles",
@@ -73,10 +60,6 @@ function loadMainPrompts() {
                     value: "REMOVE_DEPARTMENT"
                 },
                 {
-                    name: "View Total Utilized Budget By Department",
-                    value: "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT"
-                },
-                {
                     name: "quit",
                     value: "QUIT"
                 }
@@ -89,12 +72,6 @@ function loadMainPrompts() {
             case "VIEW_EMPLOYEES":
                 viewEmployees();
                 break;
-            case "VIEW_EMPLOYEES_BY_DEPARTMENT":
-                viewEmployeesByDepartment();
-                break;
-            case "VIEW_EMPLOYEES_BY_MANAGER":
-                viewEmployeesByManager();
-                break;
             case "ADD_EMPLOYEE":
                 addEmployee();
                 break;
@@ -104,9 +81,6 @@ function loadMainPrompts() {
             case "UPDATE_EMPLOYEE_ROLE":
                 updateEmployeeRole();
                 break;
-            case "UPDATE_EMPLOYEE_MANAGER":
-                updateEmployeeManager();
-                break;
             case "VIEW_DEPARTMENTS":
                 viewDepartment();
                 break;
@@ -115,9 +89,6 @@ function loadMainPrompts() {
                 break;
             case "REMOVE_DEPARTMENT":
                 removeDepartment();
-                break;
-            case "VIEW_UTILIZED_BUDGET_BY_DEPARTMENT":
-                viewUtilizedBudgetByDepartment();
                 break;
             case "VIEW_ROLES":
                 viewRoles();
@@ -144,28 +115,6 @@ function viewEmployees() {
         .then(() => loadMainPrompts());
 }
 
-// view all employees by department
-function viewEmployeesByDepartment() {
-    db.findEmployeesDepartment()
-        .then(([rows]) => {
-            let employeeDepartment = rows;
-            console.log("\n")
-            console.table(employeeDepartment);
-        })
-        .then(() => loadMainPrompts());
-}
-
-// view all employees by manager
-function viewEmployeesByManager() {
-    db.findAllEmployeesManager()
-        .then(([rows]) => {
-            let employeeManager = rows;
-            console.log("\n")
-            console.table(employeeManager);
-        })
-        .then(() => loadMainPrompts());
-}
-
 // add employee
 function addEmployee() {
     db.addEmployee()
@@ -177,15 +126,26 @@ function addEmployee() {
         .then(() => loadMainPrompts());
 }
 
+// NEED TO TEST
 // remove employee
 function removeEmployee() {
-    db.removeEmployee()
+    prompt ([{
+        type: "input",
+        name: "deleteEmployee",
+        message: "Enter the id of the employee you would like to remove"
+    }])
+    .then((response) => {
+        let deleteEmployee = { id: response.deleteEmployee }
+        db.removeEmployee(deleteEmployee)
         .then(([rows]) => {
-            let userRemoveEmployee = rows;
-            console.log("\n")
-            console.table(userRemoveEmployee);
+            let department = db.viewAllDepartment()
+            .then( data => {
+                console.log("\n")
+                console.table(data);
+            })
+            .then(() => loadMainPrompts());
         })
-        .then(() => loadMainPrompts());
+    })
 }
 
 // update employee role
@@ -199,20 +159,10 @@ function updateEmployeeRole() {
         .then(() => loadMainPrompts());
 }
 
-// update employee manager
-function updateEmployeeManager() {
-    db.updateEmployeeManager()
-        .then(([rows]) => {
-            let updateEmployeeM = rows;
-            console.log("\n")
-            console.table(updateEmployeeM);
-        })
-        .then(() => loadMainPrompts());
-}
-
+// DONE
 // view all departments
 function viewDepartment() {
-    db.viewDepartment()
+    db.viewAllDepartment()
         .then(([rows]) => {
             let department = rows;
             console.log("\n")
@@ -221,42 +171,52 @@ function viewDepartment() {
         .then(() => loadMainPrompts());
 }
 
+// DONE
 // add department
 function addDepartment() {
-    db.addDepartment()
+    prompt ([{
+        type: "input",
+        name: "newDepartment",
+        message: "What would you like to name the new department?"
+    }])
+    .then ((response) => {
+        let newDepartment = { name: response.newDepartment }
+        db.addDepartment(newDepartment)
         .then(([rows]) => {
             let department = rows;
             console.log("\n")
             console.table(department);
         })
         .then(() => loadMainPrompts());
+    }) 
 }
 
+// DONE
 // remove department
 function removeDepartment() {
-    db.removeDepartment()
+    prompt ([{
+        type: "input",
+        name: "deleteDepartment",
+        message: "Enter the id of the department you would like to remove"
+    }])
+    .then((response) => {
+        let deleteDepartment = { id: response.deleteDepartment }
+        db.removeDepartment(deleteDepartment)
         .then(([rows]) => {
-            let department = rows;
-            console.log("\n")
-            console.table(department);
+            let department = db.viewAllDepartment()
+            .then( data => {
+                console.log("\n")
+                console.table(data);
+            })
+            .then(() => loadMainPrompts());
         })
-        .then(() => loadMainPrompts());
+    })
 }
 
-// view all departments and show their total utilized department budget
-function viewUtilizedBudgetByDepartment() {
-    db.viewDepartmentBudgets()
-        .then(([rows]) => {
-            let departments = rows;
-            console.log("\n")
-            console.table(departments);
-        })
-        .then(() => loadMainPrompts());
-}
-
+// DONE
 // view all roles
 function viewRoles() {
-    db.viewRoles()
+    db.viewAllRoles()
         .then(([rows]) => {
             let roles = rows;
             console.log("\n")
@@ -265,57 +225,67 @@ function viewRoles() {
         .then(() => loadMainPrompts());
 }
 
+
 // add role
+// getting an error on addRole and possibly removeRole
+// when the user selects a sales department how do i get the sales department_id 
 function addRole() {
-    db.addRole()
-        .then(([rows]) => {
-            let role = rows;
-            console.log("\n")
-            console.table(role);
-        })
-        .then(() => loadMainPrompts());
+    prompt ([
+        {
+            type: "input",
+            name: "newRoleSalary",
+            message: "What is the salary of the new role?",
+        },
+        {
+            type: "list",
+            message: "What is the name of the new role?",
+            choices: ["Sales", "Engineering", "Finance", "Legal"],
+            name: "newRoleName",
+        },
+        {
+            type: "list",
+            message: "Please select the department id of the role you would like to add",
+            choices: ["1", "2", "3", "4"],
+            name: "newRoleDepartmentId",
+        },
+    ])
+    .then ((response) => {
+        console.log(response)
+
+        let newRole = { title: response.newRoleName, salary: response.newRoleSalary, department_id: response.newRoleDepartmentId }
+
+        console.log (newRole)
+        db.addRole(newRole)
+
+
+        // let newRole = { title: response.newRoleTitle, salary: response.newRoleSalary, department_id: response.newRoleDepartmentId }
+        // db.addRole(newRole)
+        // .then(([rows]) => {
+        //     let role = rows;
+        //     console.log("\n")
+        //     console.table(role);
+        // })
+        // .then(() => loadMainPrompts());
+    }) 
 }
 
-//  remove role
+//  COMPLETED
 function removeRole() {
-    db.removeRole()
+    prompt ([{
+        type: "input",
+        name: "deleteRole",
+        message: "Enter the id of the role you would like to remove"
+    }])
+    .then((response) => {
+        let deleteRole = { id: response.deleteRole }
+        db.removeRole(deleteRole)
         .then(([rows]) => {
-            let role = rows;
-            console.log("\n")
-            console.table(role);
+            let department = db.viewAllDepartment()
+            .then( data => {
+                console.log("\n")
+                console.table(data);
+            })
+            .then(() => loadMainPrompts());
         })
-        .then(() => loadMainPrompts());
+    })
 }
-
-
-//  ask for help finishing the schema.sql
-
-// ask about whats happening in the viewUtilizedBudgetByDepartment() function
-
-// ask about where to create the db.viewDepartmentBudgets() function
-
-
-// where should i put this code 
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-app.get('/department', (req, res) => {
-    res.send('connected to department db');
-})
-
-app.get('/role', (req, res) => {
-    res.send('connected to role db');
-})
-
-app.get('/employee', (req, res) => {
-    res.send('connected to employee db');
-})
-
-app.get('*', (req, res) => {
-    res.send('404 page not found.')
-})
-
-app.listen(PORT, () => {
-    console.log(`server is listening on port ${PORT}`);
-});
