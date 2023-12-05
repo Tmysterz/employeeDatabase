@@ -99,9 +99,15 @@ function loadMainPrompts() {
             case "REMOVE_ROLE":
                 removeRole();
                 break;
-            
+            case "QUIT":
+                quit();
+            break;
         }
     })
+}
+
+function quit () {
+    return
 }
 
 // view all employees
@@ -115,18 +121,42 @@ function viewEmployees() {
         .then(() => loadMainPrompts());
 }
 
+// COMPLETED
 // add employee
 function addEmployee() {
-    db.addEmployee()
-        .then(([rows]) => {
-            let userAddEmployee = rows;
-            console.log("\n")
-            console.table(userAddEmployee);
-        })
+    prompt ([
+        {
+            type: "input",
+            name: "first_name",
+            message: "What is the first name of the new employee?",
+        }, 
+        {
+            type: "input",
+            name: "last_name",
+            message: "What is the last name of the new employee?"
+        },
+        {
+            type: "input",
+            name: "newRoleEmployee",
+            message: "What is the role ID of the new employee?"
+        },
+        {
+            type: "input",
+            name: "managerID",
+            message: "What is the managers ID number?"
+        },
+    ])
+    .then ((response) => {
+
+        let newEmployee =  [ response.first_name, response.last_name, response.newRoleEmployee, response.managerID ]
+
+        db.addEmployee(newEmployee)
+
         .then(() => loadMainPrompts());
+    }) 
 }
 
-// NEED TO TEST
+// COMPLETED
 // remove employee
 function removeEmployee() {
     prompt ([{
@@ -137,14 +167,7 @@ function removeEmployee() {
     .then((response) => {
         let deleteEmployee = { id: response.deleteEmployee }
         db.removeEmployee(deleteEmployee)
-        .then(([rows]) => {
-            let department = db.viewAllDepartment()
-            .then( data => {
-                console.log("\n")
-                console.table(data);
-            })
-            .then(() => loadMainPrompts());
-        })
+        .then(() => loadMainPrompts());
     })
 }
 
@@ -182,11 +205,6 @@ function addDepartment() {
     .then ((response) => {
         let newDepartment = { name: response.newDepartment }
         db.addDepartment(newDepartment)
-        .then(([rows]) => {
-            let department = rows;
-            console.log("\n")
-            console.table(department);
-        })
         .then(() => loadMainPrompts());
     }) 
 }
@@ -202,14 +220,7 @@ function removeDepartment() {
     .then((response) => {
         let deleteDepartment = { id: response.deleteDepartment }
         db.removeDepartment(deleteDepartment)
-        .then(([rows]) => {
-            let department = db.viewAllDepartment()
-            .then( data => {
-                console.log("\n")
-                console.table(data);
-            })
-            .then(() => loadMainPrompts());
-        })
+        .then(() => loadMainPrompts());
     })
 }
 
@@ -225,10 +236,8 @@ function viewRoles() {
         .then(() => loadMainPrompts());
 }
 
-
+// DONE
 // add role
-// getting an error on addRole and possibly removeRole
-// when the user selects a sales department how do i get the sales department_id 
 function addRole() {
     prompt ([
         {
@@ -237,10 +246,9 @@ function addRole() {
             message: "What is the salary of the new role?",
         },
         {
-            type: "list",
-            message: "What is the name of the new role?",
-            choices: ["Sales", "Engineering", "Finance", "Legal"],
+            type: "input",
             name: "newRoleName",
+            message: "What is the name of the new role?",
         },
         {
             type: "list",
@@ -250,22 +258,11 @@ function addRole() {
         },
     ])
     .then ((response) => {
-        console.log(response)
 
-        let newRole = { title: response.newRoleName, salary: response.newRoleSalary, department_id: response.newRoleDepartmentId }
+        let newRole = [ response.newRoleName, response.newRoleSalary, response.newRoleDepartmentId ]
 
-        console.log (newRole)
         db.addRole(newRole)
-
-
-        // let newRole = { title: response.newRoleTitle, salary: response.newRoleSalary, department_id: response.newRoleDepartmentId }
-        // db.addRole(newRole)
-        // .then(([rows]) => {
-        //     let role = rows;
-        //     console.log("\n")
-        //     console.table(role);
-        // })
-        // .then(() => loadMainPrompts());
+        .then(() => loadMainPrompts());
     }) 
 }
 
@@ -279,13 +276,6 @@ function removeRole() {
     .then((response) => {
         let deleteRole = { id: response.deleteRole }
         db.removeRole(deleteRole)
-        .then(([rows]) => {
-            let department = db.viewAllDepartment()
-            .then( data => {
-                console.log("\n")
-                console.table(data);
-            })
-            .then(() => loadMainPrompts());
-        })
+        .then(() => loadMainPrompts());
     })
 }

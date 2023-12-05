@@ -8,17 +8,18 @@ class Data {
 
     findAllEmployees() {
         return this.db.promise().query(
-            "SELECT * FROM employee"
+            "SELECT * FROM employee JOIN role ON employee.role_id = role.id "
         );
     }
 
-    addEmployee() {
-
+    addEmployee(employee) {
+        return this.db.promise().query(
+            "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", employee
+        )
     }
 
     // need to test
     removeEmployee(employee) {
-        console.log(employee)
         return this.db.promise().query(
             "DELETE FROM employee WHERE id= ?", employee.id
         )
@@ -45,7 +46,6 @@ class Data {
 
     // COMPLETED
     removeDepartment(department) {
-        console.log(department)
         return this.db.promise().query(
             "DELETE FROM department WHERE id= ?", department.id
         );
@@ -58,12 +58,11 @@ class Data {
         );
     }
 
-    // getting error on addRole 
-    // all values of new role added are either 0 or null
+    // COMPLETED
 
     addRole(role) {
         return this.db.promise().query(
-            "INSERT INTO role (title, salary, department_id) VALUES (?)", role
+            "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", role
         )
     }
 
