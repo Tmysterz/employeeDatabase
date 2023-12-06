@@ -43,4 +43,7 @@
   if you have any questions about the repo, Please feel free to open a issue or contact me directly at Terrencemccarthysnkrs@gmail.com
   You can find more of my work at https://github.com/Tmysterz
 
-ADD WALKTHROUGH VIDEO INTO README
+
+  ## Walkthrough video
+
+  https://drive.google.com/file/d/1O5THmQNdodg7BQKSDJNLqHsZPdJtXia-/view

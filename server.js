@@ -173,13 +173,27 @@ function removeEmployee() {
 
 // update employee role
 function updateEmployeeRole() {
-    db.updateEmployeeRole()
-        .then(([rows]) => {
-            let updateEmployeeR = rows;
-            console.log("\n")
-            console.table(updateEmployeeR);
-        })
+    prompt ([
+        {
+            type: "list",
+            message: "Please select the ID of the employee you would like to update",
+            choices: ["1", "2", "3", "4", "5", "6", "7", "8"],
+            name: "selectEmployee",
+        },
+        {
+            type: "list",
+            message: "Please select the ID of the updated role",
+            choices: ["1", "2", "3", "4", "5", "6", "7", "8"],
+            name: "newEmployeeRole",
+        },
+
+    ])
+    .then ((response) => {
+        let updateRole = [ response.selectEmployee, response.newEmployeeRole ]
+
+        db.updateEmployeeRole(updateRole)
         .then(() => loadMainPrompts());
+    })
 }
 
 // DONE

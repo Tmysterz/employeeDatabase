@@ -25,8 +25,10 @@ class Data {
         )
     }
 
-    updateEmployeeRole() {
-
+    updateEmployeeRole(updatedRole) {
+        return this.db.promise().query(
+            "UPDATE employee SET role_id = ? WHERE  manager_id = ? ", updatedRole
+        )
     }
 
     // COMPLETED
